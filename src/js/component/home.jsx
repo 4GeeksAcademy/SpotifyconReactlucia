@@ -1,43 +1,3 @@
-// import { useState, useEffect } from "react";
-
-
-// //include images into your bundle
-// import rigoImage from "../../img/rigo-baby.jpg";
-
-// //create your first component
-// const Home = () => {
-
-
-
-// 	const [canciones, setCanciones] = useState([])
-// 	console.log(canciones);
-
-
-// function obtenerCanciones() {
-// 	fetch('https://rickandmortyapi.com/api/character')
-// 		.then((response) => response.json())
-// 		.then((data) => setCanciones(data.results))
-// 		.catch((error) => console.log(error))
-// }
-
-// 	useEffect(function () {
-// 		obtenerCanciones()
-// 	}, [])
-
-// 	return (
-// 		<div className="text-center">
-// 			<ul>
-// 				{canciones.map(function (item) { return <li>{item.name}</li> })}
-// 			</ul>
-// 		</div>
-// 	);
-// };
-
-// export default Home;
-
-
-
-
 
 import React, { useState, useEffect, useRef } from "react";
 
@@ -49,7 +9,9 @@ const Home = () => {
 
 
 	const [canciones, setCanciones] = useState([])
+	const [Index, setIndex] = useState([])
 	console.log(canciones);
+	console.log(Index);
 
 
 	const inputElement = useRef();
@@ -58,12 +20,15 @@ const Home = () => {
 
 	const focusInput = () => {
 
+
 		inputElement.current.play();
+
 		console.log(inputElement.current);
 
 	};
 	const focusNext = () => {
-		nextElement.curret.play();
+		nextElement.current.play();
+
 	}
 
 
@@ -81,7 +46,7 @@ const Home = () => {
 		obtenerCanciones()
 	}, [])
 
-	function SeleccionarCancion(url, index) {
+	function SeleccionarCancion(url) {
 		console.log(url)
 		let urlsong = "https://assets.breatheco.de/apis/sound/" + url;
 		inputElement.current.src = urlsong;
@@ -90,20 +55,30 @@ const Home = () => {
 		// audio.play(url);
 
 	}
-	function next(url, index) {
-		if (index == [19])
-			index == [0]
-		else (index < [20])
-		index + 1
-		let urlsong = "https://assets.breatheco.de/apis/sound/" + url;
-		let Next = index + urlsong
-		nextElement.current.src = Next
+	function next() {
+		if (Index == 19) {
+			inputElement.current.src = "https://assets.breatheco.de/apis/sound/" + canciones[0].url
+
+			setIndex(1)
+			inputElement.current.play()
+		}
+		// else (index < 20)
+		// index + 1
+		inputElement.current.src = "https://assets.breatheco.de/apis/sound/" + canciones[Index].url
+		setIndex(Index + 1)
+		inputElement.current.play()
+		// let urlsong = "https://assets.breatheco.de/apis/sound/" + url;
+		// let Next = urlsong[index]
+		// nextElement.current.src = Next
+		// nextElement.current.play();
+		console.log(canciones[Index].url)
+		console.log(Index)
 	}
 	function previus(url, index) {
 		if (index >= 0)
 			index - 1
 		let urlsong = "https://assets.breatheco.de/apis/sound/" + url;
-		let anterior = index + urlsong
+		let anterior = urlsong[index]
 		inputElement.current.src = anterior
 	}
 	function ponerCancion(param) {
@@ -111,25 +86,39 @@ const Home = () => {
 		console.log("funcion")
 
 	}
+	function playNext() {
+		next(focusNext())
+
+		console.log("aaaaaaaaaaaaa")
+	}
+
+
+
+	function playSong() {
+		canciones.forEach(setCanciones => {
+			console.log(setCanciones)
+		})
+	}
+
 
 
 	return (
 		<div className="" style={{ width: "600px" }}>
 
-			<ol className="text-left text-light fs-4 text lh-lg mx-3 position-absolute top-0 start-50 translate-middle-x bg-dark" style={{ width: "600px" }}>
+			<ol className="text-left text-light fs-4 text lh-lg mx-3 position-absolute top-0 start-50 translate-middle-x bg-dark" style={{ width: "600px", paddingLeft: "100px" }}>
 				{/* [<li>Morty Smith</li>,<li>Rick Sanchez</li> ] */}
-				{canciones.map(function (item, index) { return <li key={item.id} style={{ textDecoration: "underline" }} onClick={function () { SeleccionarCancion(item.url) }}>{item.name}</li> })}
+				{canciones.map(function (item, index) { return <li key={item.id} onClick={function () { SeleccionarCancion(item.url) }}>{item.name}</li> })}
 			</ol>
-			<div className="bg-dark position-fixed bottom-0 start-50 translate-middle-x w-100 p-3">
-				<button className="" onClick={ponerCancion}>anterior</button>
+			<div className="d-flex justify-content-center bg-dark position-fixed bottom-0 start-50 translate-middle-x w-100 p-3">
+				<button className=" bg-transparent border-0 mx-3" style={{ fontSize: "1.7rem", color: "white" }} onClick={previus}><i className="fas fa-backward" /></button>
 				<audio ref={inputElement} src={focusInput}>
 
 				</audio>
-				<button className="" onClick={ponerCancion}>play</button>
+				<button className=" bg-transparent border-0 mx-3" style={{ fontSize: "1.7rem", color: "white" }} onClick={ponerCancion}><i className="fas fa-play" /> </button>
 				<audio ref={inputElement} src={focusInput}>
 
 				</audio>
-				<button className="" onClick={ponerCancion}>next</button>
+				<button className=" bg-transparent border-0 mx-3" style={{ fontSize: "1.7rem", color: "white" }} onClick={next}><i className="fas fa-forward" /></button>
 				<audio ref={inputElement} src={focusNext}>
 
 				</audio>
